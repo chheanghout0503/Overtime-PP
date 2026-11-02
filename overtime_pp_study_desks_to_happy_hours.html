@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Overtime PP ☕🍻 — Study Desks to Happy Hours</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            paper: {
+              50: '#FAF8F5',
+              100: '#F3EFEA',
+              200: '#E6E0D6'
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    @keyframes cardFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .spot-card-anim {
+      animation: cardFadeIn 0.22s ease-out forwards;
+    }
+    @keyframes pulseDot {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.65; }
+    }
+    .live-dot {
+      animation: pulseDot 2s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body id="top" class="bg-[#FAF8F5] dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen flex flex-col justify-between transition-colors duration-200">
+
+  <div>
+    <!-- STICKY HEADER & SEARCH -->
+    <header class="sticky top-0 z-30 bg-[#FAF8F5]/95 dark:bg-slate-950/95 backdrop-blur-md border-b border-stone-200/90 dark:border-slate-800 transition-colors">
+      <div class="max-w-4xl mx-auto px-4 pt-3.5 pb-3">
+        <!-- Top Row: Title, Tagline, Result Counter & Saved/Theme Controls -->
+        <div class="flex items-start sm:items-center justify-between gap-2 mb-3">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-amber-100 dark:bg-amber-950/70 border border-amber-300/80 dark:border-amber-700/60 flex items-center justify-center text-lg shadow-sm select-none shrink-0">
+              ☕🍻
+            </div>
+            <div>
+              <div class="flex flex-wrap items-center gap-2">
+                <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-none">
+                  Overtime PP ☕🍻
+                </h1>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-bold bg-amber-100/90 dark:bg-amber-900/40 text-amber-900 dark:text-amber-300 border border-amber-300/60 dark:border-amber-700/50">
+                  Study Desks ☕ to Happy Hours 🍻
+                </span>
+              </div>
+              <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">
+                Phnom Penh Study Cafes, Hangouts &amp; Drink Deals
+              </p>
+            </div>
+          </div>
+
+          <!-- Right Controls: Saved Toggle + Theme Toggle -->
+          <div class="flex items-center gap-1.5 shrink-0">
+            <button
+              id="savedFilterBtn"
+              type="button"
+              aria-label="Show Saved Spots"
+              class="px-2.5 py-1.5 rounded-xl bg-white dark:bg-slate-900 hover:bg-stone-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 border border-stone-200 dark:border-slate-800 text-xs font-semibold flex items-center gap-1.5 shadow-sm transition"
+              title="Filter Saved Spots"
+            >
+              <span>❤️</span>
+              <span class="hidden sm:inline">Saved</span>
+              <span id="savedCountPill" class="px-1.5 py-0.2 rounded-full bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300 text-[11px] font-bold">0</span>
+            </button>
+
+            <button
+              id="themeToggleBtn"
+              type="button"
+              aria-label="Toggle Light or Dark Paper Theme"
+              class="p-2 rounded-xl bg-white dark:bg-slate-900 hover:bg-stone-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-stone-200 dark:border-slate-800 shadow-sm transition"
+              title="Toggle Light/Dark Mode"
+            >
+              <span id="themeIcon" class="text-sm leading-none">🌙</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Search Input Bar + Real-time Result Counter -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+          <div class="relative flex-1">
+            <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z" />
+            </svg>
+            <input
+              id="searchInput"
+              type="text"
+              placeholder="Search cafe, pub, street, or area (e.g. Toul Kork, BKK1, Sen Sok)..."
+              class="w-full pl-10 pr-9 py-2.5 text-xs sm:text-sm rounded-xl bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 border border-stone-300/90 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-600 dark:focus:ring-amber-500 focus:border-transparent shadow-sm transition"
+            />
+            <button
+              id="clearSearchBtn"
+              type="button"
+              aria-label="Clear search query"
+              class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-stone-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-stone-300 text-xs flex items-center justify-center"
+            >
+              ✕
+            </button>
+          </div>
+
+          <!-- Real-Time Result Counter Badge -->
+          <div class="flex items-center justify-between sm:justify-end gap-2 px-3 py-2 rounded-xl bg-stone-100/90 dark:bg-slate-900 border border-stone-200/90 dark:border-slate-800 shrink-0">
+            <div class="flex items-center gap-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 live-dot"></span>
+              <span id="resultCounterText">Showing 18 spots</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-4xl mx-auto px-4 pt-4 pb-16">
+
+      <!-- FILTER CONTROL PANEL -->
+      <section aria-label="Category, GPS, Neighborhood and Deal Filters" class="mb-5 p-4 rounded-2xl bg-white dark:bg-slate-900 border border-stone-200/90 dark:border-slate-800 shadow-sm space-y-3.5">
+
+        <!-- Row 1: Primary Segment Tabs + Live GPS "Near Me" Button -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
+          <!-- Primary Segment Tabs -->
+          <div class="p-1 rounded-xl bg-stone-100 dark:bg-slate-800/90 border border-stone-200/80 dark:border-slate-700/70 grid grid-cols-3 gap-1 flex-1">
+            <button
+              type="button"
+              data-category="all"
+              class="cat-tab-btn py-2 px-2.5 rounded-lg text-xs font-bold transition-all bg-slate-900 dark:bg-amber-500 text-white dark:text-slate-950 shadow-sm"
+            >
+              All Spots (18)
+            </button>
+            <button
+              type="button"
+              data-category="cafe"
+              class="cat-tab-btn py-2 px-2.5 rounded-lg text-xs font-semibold transition-all text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
+            >
+              ☕ Cafes &amp; Study
+            </button>
+            <button
+              type="button"
+              data-category="pub"
+              class="cat-tab-btn py-2 px-2.5 rounded-lg text-xs font-semibold transition-all text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
+            >
+              🍻 Pubs &amp; Happy Hours
+            </button>
+          </div>
+
+          <!-- Live GPS Button: "📍 Near Me" -->
+          <button
+            id="nearMeGpsBtn"
+            type="button"
+            class="py-2.5 px-4 rounded-xl text-xs font-bold border border-emerald-600/30 dark:border-emerald-500/40 bg-emerald-50/90 dark:bg-emerald-950/50 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 text-emerald-900 dark:text-emerald-300 flex items-center justify-center gap-1.5 shadow-sm transition active:scale-95 shrink-0"
+          >
+            <span id="nearMeIcon">📍</span>
+            <span id="nearMeText">Near Me</span>
+          </button>
+        </div>
+
+        <!-- Row 2: Neighborhood Filters -->
+        <div>
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+              Neighborhood / Area
+            </span>
+            <button
+              id="resetAllFiltersBtn"
+              type="button"
+              class="hidden text-xs font-bold text-amber-700 dark:text-amber-400 hover:underline"
+            >
+              Reset all filters
+            </button>
+          </div>
+          <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5">
+            <button type="button" data-area="All Areas" class="area-pill shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 transition">
+              All Areas
+            </button>
+            <button type="button" data-area="Toul Kork" class="area-pill shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold bg-stone-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-stone-200 dark:hover:bg-slate-700 transition">
+              Toul Kork
+            </button>
+            <button type="button" data-area="BKK1" class="area-pill shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold bg-stone-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-stone-200 dark:hover:bg-slate-700 transition">
+              BKK1
+            </button>
+            <button type="button" data-area="Sen Sok" class="area-pill shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold bg-stone-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-stone-200 dark:hover:bg-slate-700 transition">
+              Sen Sok
+            </button>
+            <button type="button" data-area="Russian Market (TTP)" class="area-pill shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold bg-stone-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-stone-200 dark:hover:bg-slate-700 transition">
+              Russian Market (TTP)
+            </button>
+            <button type="button" data-area="Daun Penh" class="area-pill shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold bg-stone-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-stone-200 dark:hover:bg-slate-700 transition">
+              Daun Penh
+            </button>
+          </div>
+        </div>
+
+        <!-- Row 3: Quick Deal & Study Filter Pills -->
+        <div>
+          <span class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-1.5">
+            Quick Deal &amp; Workspace Filters
+          </span>
+          <div class="flex flex-wrap gap-1.5">
+            <button type="button" data-deal="under2" class="deal-pill px-3 py-1.5 rounded-xl text-xs font-semibold border border-stone-200 dark:border-slate-700 bg-stone-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 hover:border-amber-500/60 transition">
+              Drinks Under $2.00 💵
+            </button>
+            <button type="button" data-deal="happyHour" class="deal-pill px-3 py-1.5 rounded-xl text-xs font-semibold border border-stone-200 dark:border-slate-700 bg-stone-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 hover:border-amber-500/60 transition">
+              Happy Hour Active 🕒
+            </button>
+            <button type="button" data-deal="studentDiscount" class="deal-pill px-3 py-1.5 rounded-xl text-xs font-semibold border border-stone-200 dark:border-slate-700 bg-stone-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 hover:border-amber-500/60 transition">
+              Student Discount 🎓
+            </button>
+            <button type="button" data-deal="plentifulOutlets" class="deal-pill px-3 py-1.5 rounded-xl text-xs font-semibold border border-stone-200 dark:border-slate-700 bg-stone-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 hover:border-amber-500/60 transition">
+              Lots of Outlets 🔌
+            </button>
+            <button type="button" data-deal="quietFocus" class="deal-pill px-3 py-1.5 rounded-xl text-xs font-semibold border border-stone-200 dark:border-slate-700 bg-stone-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 hover:border-amber-500/60 transition">
+              Quiet Focus 🤫
+            </button>
+          </div>
+        </div>
+
+        <!-- Active GPS Banner (when Near Me is active) -->
+        <div id="gpsStatusBanner" class="hidden pt-1 flex items-center justify-between text-xs text-emerald-800 dark:text-emerald-300 bg-emerald-50/80 dark:bg-emerald-950/40 px-3 py-2 rounded-xl border border-emerald-200 dark:border-emerald-800/60">
+          <span id="gpsStatusMessage">📍 Sorted by distance from your location (nearest to farthest)</span>
+          <button id="clearGpsBtn" type="button" class="font-bold underline ml-2">Clear GPS Sort</button>
+        </div>
+
+      </section>
+
+      <!-- SPOT CARDS GRID -->
+      <section id="spotsGridContainer" aria-label="Phnom Penh Spots" class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+        <!-- Populated dynamically via JS -->
+      </section>
+
+      <!-- EMPTY STATE -->
+      <div id="emptyStateCard" class="hidden my-8 p-8 rounded-2xl bg-white dark:bg-slate-900 border border-stone-200 dark:border-slate-800 text-center shadow-sm">
+        <div class="w-12 h-12 mx-auto mb-3 rounded-2xl bg-stone-100 dark:bg-slate-800 flex items-center justify-center text-2xl">
+          🔍
+        </div>
+        <h2 class="text-base font-bold text-slate-900 dark:text-white mb-1">
+          No spots match those exact filters
+        </h2>
+        <p class="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-4">
+          Try clearing one of your deal filters, selecting "All Areas", or submitting a new spot to the community list.
+        </p>
+        <div class="flex items-center justify-center gap-2">
+          <button
+            id="emptyResetFiltersBtn"
+            type="button"
+            class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-900 dark:bg-amber-500 text-white dark:text-slate-950 hover:opacity-90 transition"
+          >
+            Reset Filters
+          </button>
+          <button
+            id="emptyOpenModalBtn"
+            type="button"
+            class="px-4 py-2 rounded-xl text-xs font-bold bg-stone-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-stone-200 transition"
+          >
+            + Submit Spot
+          </button>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- SUBTLE FOOTER SIGNATURE -->
+  <footer class="border-t border-stone-200/80 dark:border-slate-800/80 bg-white/60 dark:bg-slate-900/50 py-6 px-4 pb-24">
+    <div class="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500 dark:text-slate-400">
+      <div class="flex items-center gap-1.5 font-medium">
+        <span>Overtime PP · Crafted by</span>
+        <a
+          href="#top"
+          id="footerBrandLink"
+          class="font-bold text-slate-800 dark:text-slate-200 underline decoration-amber-500/70 underline-offset-4 hover:text-amber-700 dark:hover:text-amber-400 transition"
+        >
+          H3
+        </a>
+      </div>
+      <div class="text-[11px] text-slate-400 dark:text-slate-500">
+        © 2026 Overtime PP · Phnom Penh Study Desks ☕ to Happy Hours 🍻
+      </div>
+    </div>
+  </footer>
+
+  <!-- FLOATING "+ Submit Spot" BUTTON -->
+  <div class="fixed bottom-5 right-4 sm:right-6 z-40">
+    <button
+      id="fabSubmitSpotBtn"
+      type="button"
+      class="flex items-center gap-2 px-4 py-3 rounded-2xl bg-slate-900 hover:bg-slate-800 dark:bg-amber-500 dark:hover:bg-amber-400 text-white dark:text-slate-950 font-bold text-xs sm:text-sm shadow-lg shadow-slate-900/20 active:scale-95 transition-all"
+    >
+      <span class="w-5 h-5 rounded-lg bg-white/15 dark:bg-slate-950/15 flex items-center justify-center text-base leading-none font-extrabold">+</span>
+      <span>Submit Spot</span>
+    </button>
+  </div>
+
+  <!-- USER SUBMISSION MODAL -->
+  <div
+    id="submitModalBackdrop"
+    class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 transition-opacity"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="submitModalTitle"
+  >
+    <div class="w-full max-w-lg bg-white dark:bg-slate-900 rounded-t-3xl sm:rounded-2xl border border-stone-200 dark:border-slate-800 shadow-2xl overflow-hidden max-h-[92vh] flex flex-col">
+      <!-- Modal Header -->
+      <div class="px-5 py-4 border-b border-stone-200 dark:border-slate-800 flex items-center justify-between bg-stone-50 dark:bg-slate-900">
+        <div class="flex items-center gap-2.5">
+          <span class="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 flex items-center justify-center text-base">
+            ✨
+          </span>
+          <div>
+            <h2 id="submitModalTitle" class="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white">
+              Submit a Phnom Penh Spot
+            </h2>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400">
+              Share a study cafe or happy hour deal with the community
+            </p>
+          </div>
+        </div>
+        <button
+          id="closeModalBtn"
+          type="button"
+          aria-label="Close modal"
+          class="w-8 h-8 rounded-xl bg-stone-200/70 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white flex items-center justify-center text-sm transition"
+        >
+          ✕
+        </button>
+      </div>
+
+      <!-- Modal Form -->
+      <form id="submitSpotForm" class="p-5 overflow-y-auto space-y-4 text-xs sm:text-sm" novalidate>
+        <div id="modalErrorBox" class="hidden p-3 rounded-xl bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs font-semibold">
+          Please enter a valid Venue Name, Starting Price ($), and Promo Description.
+        </div>
+
+        <!-- Category Selection (Cafe or Pub) -->
+        <div>
+          <span class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+            Category <span class="text-rose-500">*</span>
+          </span>
+          <div class="grid grid-cols-2 gap-2">
+            <label class="cursor-pointer">
+              <input type="radio" name="spotCategoryInput" value="cafe" checked class="peer sr-only" />
+              <div class="py-2.5 px-3 rounded-xl border border-stone-200 dark:border-slate-700 bg-stone-50 dark:bg-slate-800 peer-checked:border-slate-900 dark:peer-checked:border-amber-400 peer-checked:bg-slate-900 dark:peer-checked:bg-amber-500/20 peer-checked:text-white dark:peer-checked:text-amber-300 text-slate-700 dark:text-slate-300 font-bold text-xs text-center transition">
+                ☕ Cafe &amp; Study
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="spotCategoryInput" value="pub" class="peer sr-only" />
+              <div class="py-2.5 px-3 rounded-xl border border-stone-200 dark:border-slate-700 bg-stone-50 dark:bg-slate-800 peer-checked:border-slate-900 dark:peer-checked:border-amber-400 peer-checked:bg-slate-900 dark:peer-checked:bg-amber-500/20 peer-checked:text-white dark:peer-checked:text-amber-300 text-slate-700 dark:text-slate-300 font-bold text-xs text-center transition">
+                🍻 Pub &amp; Happy Hour
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Venue Name & Area Dropdown -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label for="spotNameInput" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+              Venue Name <span class="text-rose-500">*</span>
+            </label>
+            <input
+              id="spotNameInput"
+              type="text"
+              required
+              placeholder="e.g., Enso Cafe or Sak Pub"
+              class="w-full px-3 py-2 rounded-xl bg-stone-50 dark:bg-slate-800 border border-stone-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-600"
+            />
+          </div>
+
+          <div>
+            <label for="spotAreaInput" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+              Neighborhood / Area <span class="text-rose-500">*</span>
+            </label>
+            <select
+              id="spotAreaInput"
+              required
+              class="w-full px-3 py-2 rounded-xl bg-stone-50 dark:bg-slate-800 border border-stone-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-600"
+            >
+              <option value="Toul Kork">Toul Kork</option>
+              <option value="BKK1">BKK1</option>
+              <option value="Sen Sok">Sen Sok</option>
+              <option value="Russian Market (TTP)">Russian Market (TTP)</option>
+              <option value="Daun Penh">Daun Penh</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Starting Price & Street Address -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label for="spotPriceInput" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+              Starting Drink Price ($) <span class="text-rose-500">*</span>
+            </label>
+            <input
+              id="spotPriceInput"
+              type="number"
+              step="0.05"
+              min="0.50"
+              max="25.00"
+              required
+              placeholder="e.g., 1.50"
+              class="w-full px-3 py-2 rounded-xl bg-stone-50 dark:bg-slate-800 border border-stone-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-600"
+            />
+          </div>
+
+          <div>
+            <label for="spotStreetInput" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+              Street / Landmark
+            </label>
+            <input
+              id="spotStreetInput"
+              type="text"
+              placeholder="e.g., St. 337 near TK Avenue"
+              class="w-full px-3 py-2 rounded-xl bg-stone-50 dark:bg-slate-800 border border-stone-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-600"
+            />
+          </div>
+        </div>
+
+        <!-- Promo Description -->
+        <div>
+          <label for="spotPromoInput" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+            Promo / Deal Description <span class="text-rose-500">*</span>
+          </label>
+          <textarea
+            id="spotPromoInput"
+            rows="2"
+            required
+            placeholder="e.g., 🎓 15% off with Student ID or 🔥 Happy Hour 5–7 PM: $1.50 Draft"
+            class="w-full px-3 py-2 rounded-xl bg-stone-50 dark:bg-slate-800 border border-stone-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-600"
+          ></textarea>
+        </div>
+
+        <!-- Quick Specs Checkboxes -->
+        <div>
+          <span class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+            Workspace &amp; Deal Perks
+          </span>
+          <div class="grid grid-cols-2 gap-2">
+            <label class="flex items-center gap-2 p-2 rounded-xl bg-stone-50 dark:bg-slate-800 border border-stone-200 dark:border-slate-700 cursor-pointer">
+              <input id="chkHappyHour" type="checkbox" class="w-4 h-4 rounded text-amber-600" />
+              <span class="text-xs font-medium">🕒 Happy Hour Active</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded-xl bg-stone-50 dark:bg-slate-800 border border-stone-200 dark:border-slate-700 cursor-pointer">
+              <input id="chkStudentDiscount" type="checkbox" class="w-4 h-4 rounded text-amber-600" />
+              <span class="text-xs font-medium">🎓 Student Discount</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded-xl bg-stone-50 dark:bg-slate-800 border border-stone-200 dark:border-slate-700 cursor-pointer">
+              <input id="chkPlentifulOutlets" type="checkbox" checked class="w-4 h-4 rounded text-amber-600" />
+              <span class="text-xs font-medium">🔌 Plentiful Outlets</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded-xl bg-stone-50 dark:bg-slate-800 border border-stone-200 dark:border-slate-700 cursor-pointer">
+              <input id="chkQuietFocus" type="checkbox" checked class="w-4 h-4 rounded text-amber-600" />
+              <span class="text-xs font-medium">🤫 Quiet Focus</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="pt-2 flex items-center justify-end gap-2">
+          <button
+            id="cancelModalBtn"
+            type="button"
+            class="px-4 py-2 rounded-xl text-xs font-bold bg-stone-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-stone-200 transition"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="px-5 py-2 rounded-xl text-xs font-bold bg-slate-900 dark:bg-amber-500 text-white dark:text-slate-950 hover:opacity-90 shadow-sm transition"
+          >
+            Add Spot to Live List
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div
+    id="toastContainer"
+    role="status"
+    aria-live="polite"
+    class="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 translate-y-3 transition-all duration-300"
+  >
+    <div class="px-4 py-2.5 rounded-xl bg-slate-900 dark:bg-amber-500 text-white dark:text-slate-950 font-bold text-xs sm:text-sm shadow-xl flex items-center gap-2 border border-white/10">
+      <span id="toastMessage">Spot added to live community list! 🎉</span>
+    </div>
+  </div>
+
+  <!-- APPLICATION JAVASCRIPT -->
+  <script>
+    // --- 1. PRE-LOADED 18 REAL PHNOM PENH VENUES WITH EXACT COORDINATES ---
+    const initialSpots = [
+      // CAFES & STUDY DESKS (10 SPOTS)
+      {
+        id: 'spot-1',
+        name: 'Tube Coffee (Toul Kork)',
+        category: 'cafe',
+        avatar: '☕',
+        area: 'Toul Kork',
+        districtLabel: 'Toul Kork',
+        street: 'St. 337, Samai Square, Toul Kork',
+        lat: 11.5732,
+        lng: 104.8965,
+        priceStart: 1.50,
+        dealHeadline: '☕ Drinks start from $1.50 — Student favorite',
+        promoTag: '🎓 10% Student ID discount',
+        wifiSpeed: '55 Mbps',
+        outlets: 'Plentiful',
+        noiseLevel: 'Quiet Study',
+        happyHour: false,
+        studentDiscount: true,
+        quietFocus: true
+      },
+      {
+        id: 'spot-2',
+        name: 'Brown Coffee Roastery (BKK1)',
+        category: 'cafe',
+        avatar: '🥐',
+        area: 'BKK1',
+        districtLabel: 'BKK1',
+        street: 'St. 57 corner St. 294, BKK1',
+        lat: 11.5518,
+        lng: 104.9254,
+        priceStart: 2.85,
+        dealHeadline: '☕ Drinks start from $2.85 — Roastery & bakery hub',
+        promoTag: 'Spacious study tables & 20% off evening pastry hour',
+        wifiSpeed: '60 Mbps',
+        outlets: 'Plentiful',
+        noiseLevel: 'Quiet Study',
+        happyHour: true,
+        studentDiscount: false,
+        quietFocus: true
+      },
+      {
+        id: 'spot-3',
+        name: 'RUPP Study Hub / Blend Cafe',
+        category: 'cafe',
+        avatar: '💻',
+        area: 'Toul Kork',
+        districtLabel: 'Toul Kork',
+        street: 'Russian Federation Blvd (St. 110), near RUPP/IFL, TK',
+        lat: 11.5694,
+        lng: 104.8912,
+        priceStart: 1.40,
+        dealHeadline: '☕ Drinks start from $1.40 — Budget campus work hub',
+        promoTag: '🎓 15% off with student ID',
+        wifiSpeed: '50 Mbps',
+        outlets: 'Plentiful',
+        noiseLevel: 'Quiet Study',
+        happyHour: false,
+        studentDiscount: true,
+        quietFocus: true
+      },
+      {
+        id: 'spot-4',
+        name: 'Gather Grounds Coffee',
+        category: 'cafe',
+        avatar: '🍵',
+        area: 'Sen Sok',
+        districtLabel: 'Sen Sok',
+        street: 'Phnom Penh Thmey, St. 1978, Sen Sok',
+        lat: 11.5791,
+        lng: 104.8812,
+        priceStart: 1.75,
+        dealHeadline: '☕ Drinks start from $1.75 — Group study sets available',
+        promoTag: 'Quiet neighborhood study space',
+        wifiSpeed: '45 Mbps',
+        outlets: 'Plentiful',
+        noiseLevel: 'Quiet Study',
+        happyHour: false,
+        studentDiscount: true,
+        quietFocus: true
+      },
+      {
+        id: 'spot-5',
+        name: 'Java Creative Cafe (Toul Kork)',
+        category: 'cafe',
+        avatar: '🎨',
+        area: 'Toul Kork',
+        districtLabel: 'Toul Kork',
+        street: '#20A St. 337, Toul Kork',
+        lat: 11.5750,
+        lng: 104.8980,
+        priceStart: 2.50,
+        dealHeadline: '☕ Drinks start from $2.50 — Specialty organic roast',
+        promoTag: 'Art gallery & calm workspace',
+        wifiSpeed: '40 Mbps',
+        outlets: 'Limited',
+        noiseLevel: 'Quiet Study',
+        happyHour: false,
+        studentDiscount: false,
+        quietFocus: true
+      },
+      {
+        id: 'spot-6',
+        name: 'Lot 369 Cafe',
+        category: 'cafe',
+        avatar: '🥑',
+        area: 'Russian Market (TTP)',
+        districtLabel: 'Russian Market (TTP)',
+        street: 'St. 454 / St. 468, Russian Market (Toul Tompoung)',
+        lat: 11.5412,
+        lng: 104.9152,
+        priceStart: 2.25,
+        dealHeadline: '☕ Drinks start from $2.25 — Melbourne-style coffee',
+        promoTag: 'Cold brew & brunch spot · $1 Coffee Wednesdays',
+        wifiSpeed: '50 Mbps',
+        outlets: 'Plentiful',
+        noiseLevel: 'Quiet Study',
+        happyHour: true,
+        studentDiscount: false,
+        quietFocus: true
+      },
+      {
+        id: 'spot-7',
+        name: 'Backyard Cafe (Daun Penh)',
+        category: 'cafe',
+        avatar: '🌿',
+        area: 'Daun Penh',
+        districtLabel: 'Daun Penh',
+        street: 'St. 246 / St. 240, near Royal Palace, Daun Penh',
+        lat: 11.5612,
+        lng: 104.9310,
+        priceStart: 2.75,
+        dealHeadline: '☕ Drinks start from $2.75 — Wholefoods & clean energy',
+        promoTag: 'Quiet garden patio',
+        wifiSpeed: '40 Mbps',
+        outlets: 'Limited',
+        noiseLevel: 'Quiet Study',
+        happyHour: false,
+        studentDiscount: false,
+        quietFocus: true
+      },
+      {
+        id: 'spot-8',
+        name: 'Temple Coffee n Bakery (BKK1)',
+        category: 'cafe',
+        avatar: '🏛️',
+        area: 'BKK1',
+        districtLabel: 'BKK1',
+        street: 'St. 51 (Pasteur), BKK1',
+        lat: 11.5534,
+        lng: 104.9271,
+        priceStart: 2.00,
+        dealHeadline: '☕ Drinks start from $2.00 — Late-night work sessions',
+        promoTag: 'Open late past 11 PM',
+        wifiSpeed: '45 Mbps',
+        outlets: 'Plentiful',
+        noiseLevel: 'Social Hangout',
+        happyHour: true,
+        studentDiscount: false,
+        quietFocus: false
+      },
+      {
+        id: 'spot-9',
+        name: 'Suzy Time Hourly Cafe',
+        category: 'cafe',
+        avatar: '⏳',
+        area: 'BKK1',
+        districtLabel: 'BKK3 · St. 350',
+        street: 'St. 350, BKK3 (near BKK1)',
+        lat: 11.5460,
+        lng: 104.9190,
+        priceStart: 1.80,
+        dealHeadline: '☕ Drinks start from $1.80 — Unlimited study pass options',
+        promoTag: 'Dedicated quiet focus booths',
+        wifiSpeed: '65 Mbps',
+        outlets: 'Plentiful',
+        noiseLevel: 'Quiet Study',
+        happyHour: false,
+        studentDiscount: true,
+        quietFocus: true
+      },
+      {
+        id: 'spot-10',
+        name: 'Noir Coffee (BKK1)',
+        category: 'cafe',
+        avatar: '🖤',
+        area: 'BKK1',
+        districtLabel: 'BKK1',
+        street: 'St. 288 / St. 63, BKK1',
+        lat: 11.5501,
+        lng: 104.9230,
+        priceStart: 1.90,
+        dealHeadline: '☕ Drinks start from $1.90 — Smooth signature iced brew',
+        promoTag: 'Chill local study spot',
+        wifiSpeed: '45 Mbps',
+        outlets: 'Plentiful',
+        noiseLevel: 'Quiet Study',
+        happyHour: false,
+        studentDiscount: true,
+        quietFocus: true
+      },
+
+      // PUBS, BARS & HAPPY HOURS (8 SPOTS)
+      {
+        id: 'spot-11',
+        name: 'OT Station Cafe & Draft',
+        category: 'pub',
+        avatar: '🍺',
+        area: 'Toul Kork',
+        districtLabel: 'Toul Kork',
+        street: 'St. 315, Boeung Kok, Toul Kork',
+        lat: 11.5710,
+        lng: 104.8940,
+        priceStart: 1.50,
+        dealHeadline: '🍻 Draft starts from $1.50 — Work-to-after-hours hangout',
+        promoTag: '🔥 Happy Hour 5–7 PM: $1.25 Draft',
+        wifiSpeed: '40 Mbps',
+        outlets: 'Plentiful',
+        noiseLevel: 'Social Hangout',
+        happyHour: true,
+        studentDiscount: true,
+        quietFocus: false
+      },
+      {
+        id: 'spot-12',
+        name: 'Botanico Craft Beer Garden',
+        category: 'pub',
+        avatar: '🌿',
+        area: 'Daun Penh',
+        districtLabel: 'St. 29 · Daun Penh',
+        street: '#9B St. 29, near Independence Monument',
+        lat: 11.5585,
+        lng: 104.9302,
+        priceStart: 2.50,
+        dealHeadline: '🍻 Drinks start from $2.50 — House-brewed craft taps',
+        promoTag: '🔥 Happy Hour 4–6 PM: 20% off craft pints',
+        wifiSpeed: '35 Mbps',
+        outlets: 'Limited',
+        noiseLevel: 'Social Hangout',
+        happyHour: true,
+        studentDiscount: false,
+        quietFocus: false
+      },
+      {
+        id: 'spot-13',
+        name: 'Bassac Lane Micro-Bars',
+        category: 'pub',
+        avatar: '🍸',
+        area: 'BKK1',
+        districtLabel: 'BKK1 · St. 308',
+        street: 'Bassac Lane Alleyway off St. 308, BKK1 / Tonle Bassac',
+        lat: 11.5510,
+        lng: 104.9290,
+        priceStart: 3.00,
+        dealHeadline: '🍻 Drinks start from $3.00 — Intimate craft cocktail lane',
+        promoTag: '🔥 Happy Hour 5–7 PM: $2.50 cocktails',
+        wifiSpeed: '30 Mbps',
+        outlets: 'Limited',
+        noiseLevel: 'Social Hangout',
+        happyHour: true,
+        studentDiscount: false,
+        quietFocus: false
+      },
+      {
+        id: 'spot-14',
+        name: 'Long After Dark',
+        category: 'pub',
+        avatar: 'レコード',
+        avatarEmoji: '🥃',
+        area: 'Russian Market (TTP)',
+        districtLabel: 'Russian Market (TTP)',
+        street: '#86 St. 450, Russian Market (Toul Tompoung)',
+        lat: 11.5408,
+        lng: 104.9160,
+        priceStart: 2.50,
+        dealHeadline: '🍻 Drinks start from $2.50 — Single malts & craft cocktails',
+        promoTag: 'Cozy vintage vibes & vinyl records',
+        wifiSpeed: '35 Mbps',
+        outlets: 'Limited',
+        noiseLevel: 'Social Hangout',
+        happyHour: true,
+        studentDiscount: false,
+        quietFocus: false
+      },
+      {
+        id: 'spot-15',
+        name: 'Embargo Craft Beer',
+        category: 'pub',
+        avatar: '🎲',
+        area: 'BKK1',
+        districtLabel: 'BKK3 · St. 360',
+        street: 'St. 360 / St. 51 Alley, BKK',
+        lat: 11.5452,
+        lng: 104.9205,
+        priceStart: 2.50,
+        dealHeadline: '🍻 Drinks start from $2.50 — 9 rotating Cambodian craft taps',
+        promoTag: 'Weekly flight deals & board games',
+        wifiSpeed: '35 Mbps',
+        outlets: 'Limited',
+        noiseLevel: 'Social Hangout',
+        happyHour: true,
+        studentDiscount: false,
+        quietFocus: false
+      },
+      {
+        id: 'spot-16',
+        name: "Oscar's on the Corner",
+        category: 'pub',
+        avatar: '🎸',
+        area: 'Daun Penh',
+        districtLabel: 'Daun Penh · St. 104',
+        street: 'Corner St. 104 & St. 13, Riverside, Daun Penh',
+        lat: 11.5715,
+        lng: 104.9275,
+        priceStart: 1.50,
+        dealHeadline: '🍻 Drinks start from $1.50 — Iconic nightly live band stage',
+        promoTag: 'Late night live music & cheap cold beer',
+        wifiSpeed: '30 Mbps',
+        outlets: 'Limited',
+        noiseLevel: 'Social Hangout',
+        happyHour: true,
+        studentDiscount: false,
+        quietFocus: false
+      },
+      {
+        id: 'spot-17',
+        name: 'Cuppu Coffee & Bar',
+        category: 'pub',
+        avatar: '🍹',
+        area: 'Russian Market (TTP)',
+        districtLabel: 'Russian Market (TTP)',
+        street: 'Russian Market Neighborhood, Toul Tompoung',
+        lat: 11.5425,
+        lng: 104.9145,
+        priceStart: 1.75,
+        dealHeadline: '☕🍻 Drinks start from $1.75 — Hybrid day desk & night bar',
+        promoTag: 'Specialty coffee by day, drink promos by night',
+        wifiSpeed: '45 Mbps',
+        outlets: 'Plentiful',
+        noiseLevel: 'Social Hangout',
+        happyHour: true,
+        studentDiscount: true,
+        quietFocus: false
+      },
+      {
+        id: 'spot-18',
+        name: 'Eclipse Sky Bar',
+        category: 'pub',
+        avatar: '🌇',
+        area: 'Daun Penh',
+        districtLabel: 'Daun Penh · Monivong',
+        street: '23rd Floor, Phnom Penh Tower, Monivong Blvd, Daun Penh',
+        lat: 11.5645,
+        lng: 104.9208,
+        priceStart: 3.50,
+        dealHeadline: '🍻 Drinks start from $3.50 — 360° open-air city skyline view',
+        promoTag: '🔥 Sunset Happy Hour 5–7 PM: 30% off drinks',
+        wifiSpeed: '40 Mbps',
+        outlets: 'Limited',
+        noiseLevel: 'Social Hangout',
+        happyHour: true,
+        studentDiscount: false,
+        quietFocus: false
+      }
+    ];
+
+    // Default coordinates per neighborhood for newly submitted spots
+    const AREA_COORDS = {
+      'Toul Kork': { lat: 11.5725, lng: 104.8950 },
+      'BKK1': { lat: 11.5515, lng: 104.9260 },
+      'Sen Sok': { lat: 11.5785, lng: 104.8820 },
+      'Russian Market (TTP)': { lat: 11.5415, lng: 104.9150 },
+      'Daun Penh': { lat: 11.5650, lng: 104.9265 }
+    };
+
+    // --- 2. STATE & STORAGE ---
+    let spots = [...initialSpots];
+    let savedSpotIds = new Set();
+
+    try {
+      const storedCustom = localStorage.getItem('overtime_pp_v3_custom_spots');
+      if (storedCustom) {
+        const parsed = JSON.parse(storedCustom);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          spots = [...parsed, ...initialSpots];
+        }
+      }
+      const storedSaved = localStorage.getItem('overtime_pp_v3_saved_ids');
+      if (storedSaved) {
+        savedSpotIds = new Set(JSON.parse(storedSaved));
+      }
+    } catch (e) {
+      // Safe fallback inside restricted iframes
+    }
+
+    const filterState = {
+      search: '',
+      category: 'all', // 'all', 'cafe', 'pub'
+      area: 'All Areas',
+      savedOnly: false,
+      gpsActive: false,
+      userLat: null,
+      userLng: null,
+      deals: {
+        under2: false,
+        happyHour: false,
+        studentDiscount: false,
+        plentifulOutlets: false,
+        quietFocus: false
+      }
+    };
+
+    // --- 3. HAVERSINE FORMULA FOR REAL-TIME DISTANCE (KM) ---
+    function calculateHaversineKm(lat1, lon1, lat2, lon2) {
+      const toRad = (deg) => (deg * Math.PI) / 180;
+      const R = 6371; // Earth radius in kilometers
+      const dLat = toRad(lat2 - lat1);
+      const dLon = toRad(lon2 - lon1);
+      const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return R * c;
+    }
+
+    // --- 4. DOM REFERENCES ---
+    const searchInput = document.getElementById('searchInput');
+    const clearSearchBtn = document.getElementById('clearSearchBtn');
+    const resultCounterText = document.getElementById('resultCounterText');
+    const savedFilterBtn = document.getElementById('savedFilterBtn');
+    const savedCountPill = document.getElementById('savedCountPill');
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    const themeIcon = document.getElementById('themeIcon');
+    const nearMeGpsBtn = document.getElementById('nearMeGpsBtn');
+    const nearMeText = document.getElementById('nearMeText');
+    const gpsStatusBanner = document.getElementById('gpsStatusBanner');
+    const gpsStatusMessage = document.getElementById('gpsStatusMessage');
+    const clearGpsBtn = document.getElementById('clearGpsBtn');
+    const resetAllFiltersBtn = document.getElementById('resetAllFiltersBtn');
+    const spotsGridContainer = document.getElementById('spotsGridContainer');
+    const emptyStateCard = document.getElementById('emptyStateCard');
+    const emptyResetFiltersBtn = document.getElementById('emptyResetFiltersBtn');
+    const emptyOpenModalBtn = document.getElementById('emptyOpenModalBtn');
+    const fabSubmitSpotBtn = document.getElementById('fabSubmitSpotBtn');
+    const submitModalBackdrop = document.getElementById('submitModalBackdrop');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const cancelModalBtn = document.getElementById('cancelModalBtn');
+    const submitSpotForm = document.getElementById('submitSpotForm');
+    const modalErrorBox = document.getElementById('modalErrorBox');
+    const toastContainer = document.getElementById('toastContainer');
+    const toastMessage = document.getElementById('toastMessage');
+
+    // --- 5. HELPER UTILITIES ---
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    let toastTimer = null;
+    function showToast(msg) {
+      toastMessage.textContent = msg;
+      toastContainer.classList.remove('opacity-0', 'translate-y-3');
+      toastContainer.classList.add('opacity-100', 'translate-y-0');
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toastContainer.classList.add('opacity-0', 'translate-y-3');
+        toastContainer.classList.remove('opacity-100', 'translate-y-0');
+      }, 3200);
+    }
+
+    function hasAnyActiveFilter() {
+      if (filterState.search.trim() !== '') return true;
+      if (filterState.category !== 'all') return true;
+      if (filterState.area !== 'All Areas') return true;
+      if (filterState.savedOnly) return true;
+      if (filterState.gpsActive) return true;
+      return Object.values(filterState.deals).some(Boolean);
+    }
+
+    // --- 6. SYNC FILTER BUTTON STYLES ---
+    function updateFilterControlsUI() {
+      const totalCount = spots.length;
+      const cafeCount = spots.filter((s) => s.category === 'cafe').length;
+      const pubCount = spots.filter((s) => s.category === 'pub').length;
+
+      // Primary Segment Tabs
+      document.querySelectorAll('.cat-tab-btn').forEach((btn) => {
+        const cat = btn.getAttribute('data-category');
+        if (cat === 'all') btn.textContent = `All Spots (${totalCount})`;
+        if (cat === 'cafe') btn.textContent = `☕ Cafes & Study (${cafeCount})`;
+        if (cat === 'pub') btn.textContent = `🍻 Pubs & Happy Hours (${pubCount})`;
+
+        const active = filterState.category === cat;
+        if (active) {
+          btn.className = 'cat-tab-btn py-2 px-2.5 rounded-lg text-xs font-bold transition-all bg-slate-900 dark:bg-amber-500 text-white dark:text-slate-950 shadow-sm';
+        } else {
+          btn.className = 'cat-tab-btn py-2 px-2.5 rounded-lg text-xs font-semibold transition-all text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white';
+        }
+      });
+
+      // Neighborhood Pills
+      document.querySelectorAll('.area-pill').forEach((btn) => {
+        const area = btn.getAttribute('data-area');
+        const active = filterState.area === area;
+        if (active) {
+          btn.className = 'area-pill shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-900 dark:bg-amber-500 text-white dark:text-slate-950 shadow-sm transition';
+        } else {
+          btn.className = 'area-pill shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold bg-stone-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-stone-200 dark:hover:bg-slate-700 transition';
+        }
+      });
+
+      // Quick Deal Pills
+      document.querySelectorAll('.deal-pill').forEach((btn) => {
+        const key = btn.getAttribute('data-deal');
+        const active = Boolean(filterState.deals[key]);
+        if (active) {
+          btn.className = 'deal-pill px-3 py-1.5 rounded-xl text-xs font-bold border border-amber-600 dark:border-amber-400 bg-amber-100/90 dark:bg-amber-500/20 text-amber-950 dark:text-amber-200 shadow-sm transition';
+        } else {
+          btn.className = 'deal-pill px-3 py-1.5 rounded-xl text-xs font-semibold border border-stone-200 dark:border-slate-700 bg-stone-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 hover:border-amber-500/60 transition';
+        }
+      });
+
+      // GPS Near Me button state
+      if (filterState.gpsActive) {
+        nearMeGpsBtn.className = 'py-2.5 px-4 rounded-xl text-xs font-extrabold border border-emerald-600 bg-emerald-600 text-white flex items-center justify-center gap-1.5 shadow-sm transition active:scale-95 shrink-0';
+        nearMeText.textContent = 'Near Me (Active)';
+        gpsStatusBanner.classList.remove('hidden');
+      } else {
+        nearMeGpsBtn.className = 'py-2.5 px-4 rounded-xl text-xs font-bold border border-emerald-600/30 dark:border-emerald-500/40 bg-emerald-50/90 dark:bg-emerald-950/50 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 text-emerald-900 dark:text-emerald-300 flex items-center justify-center gap-1.5 shadow-sm transition active:scale-95 shrink-0';
+        nearMeText.textContent = 'Near Me';
+        gpsStatusBanner.classList.add('hidden');
+      }
+
+      // Saved button state
+      savedCountPill.textContent = String(savedSpotIds.size);
+      if (filterState.savedOnly) {
+        savedFilterBtn.classList.add('ring-2', 'ring-rose-500', 'bg-rose-50', 'dark:bg-rose-950/40');
+      } else {
+        savedFilterBtn.classList.remove('ring-2', 'ring-rose-500', 'bg-rose-50', 'dark:bg-rose-950/40');
+      }
+
+      if (hasAnyActiveFilter()) {
+        resetAllFiltersBtn.classList.remove('hidden');
+      } else {
+        resetAllFiltersBtn.classList.add('hidden');
+      }
+    }
+
+    // --- 7. FILTERING, DISTANCE CALCULATION & RENDERING ---
+    function getProcessedSpots() {
+      const q = filterState.search.trim().toLowerCase();
+
+      const filtered = spots
+        .map((spot) => {
+          let distanceKm = null;
+          if (filterState.gpsActive && filterState.userLat !== null && filterState.userLng !== null) {
+            distanceKm = calculateHaversineKm(
+              filterState.userLat,
+              filterState.userLng,
+              spot.lat,
+              spot.lng
+            );
+          }
+          return { ...spot, distanceKm };
+        })
+        .filter((spot) => {
+          if (filterState.savedOnly && !savedSpotIds.has(spot.id)) return false;
+          if (filterState.category !== 'all' && spot.category !== filterState.category) return false;
+          if (filterState.area !== 'All Areas' && spot.area !== filterState.area) return false;
+
+          if (filterState.deals.under2 && spot.priceStart > 2.00) return false;
+          if (filterState.deals.happyHour && !spot.happyHour) return false;
+          if (filterState.deals.studentDiscount && !spot.studentDiscount) return false;
+          if (filterState.deals.plentifulOutlets && spot.outlets !== 'Plentiful') return false;
+          if (filterState.deals.quietFocus && !spot.quietFocus) return false;
+
+          if (q) {
+            const haystack = [
+              spot.name,
+              spot.area,
+              spot.districtLabel,
+              spot.street,
+              spot.dealHeadline,
+              spot.promoTag,
+              spot.noiseLevel
+            ].join(' ').toLowerCase();
+            if (!haystack.includes(q)) return false;
+          }
+          return true;
+        });
+
+      if (filterState.gpsActive) {
+        filtered.sort((a, b) => (a.distanceKm ?? 999) - (b.distanceKm ?? 999));
+      }
+
+      return filtered;
+    }
+
+    function renderSpots() {
+      updateFilterControlsUI();
+      const list = getProcessedSpots();
+
+      resultCounterText.textContent = `Showing ${list.length} ${list.length === 1 ? 'spot' : 'spots'}`;
+
+      if (list.length === 0) {
+        spotsGridContainer.innerHTML = '';
+        emptyStateCard.classList.remove('hidden');
+        return;
+      }
+
+      emptyStateCard.classList.add('hidden');
+
+      spotsGridContainer.innerHTML = list.map((spot) => {
+        const isSaved = savedSpotIds.has(spot.id);
+        const isPub = spot.category === 'pub';
+        const iconEmoji = spot.avatarEmoji || spot.avatar || (isPub ? '🍻' : '☕');
+
+        const dealContainerStyle = isPub
+          ? 'bg-amber-50/90 dark:bg-amber-950/35 border-amber-200/90 dark:border-amber-800/60 text-amber-950 dark:text-amber-200'
+          : 'bg-emerald-50/85 dark:bg-emerald-950/35 border-emerald-200/90 dark:border-emerald-800/60 text-emerald-950 dark:text-emerald-200';
+
+        const outletBadgeStyle = spot.outlets === 'Plentiful'
+          ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-emerald-200/80 dark:border-emerald-800/60'
+          : 'bg-stone-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-stone-200 dark:border-slate-700';
+
+        const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spot.name + ' ' + spot.street + ' Phnom Penh')}`;
+
+        return `
+          <article class="spot-card-anim rounded-2xl bg-white dark:bg-slate-900 border border-stone-200/90 dark:border-slate-800 p-4 shadow-sm hover:shadow-md hover:border-amber-400/70 dark:hover:border-amber-500/50 transition-all flex flex-col justify-between">
+            <div>
+              <!-- Top Row: District Pill, Live Open Status & Live Distance Badge -->
+              <div class="flex flex-wrap items-center justify-between gap-1.5 mb-2.5">
+                <div class="flex flex-wrap items-center gap-1.5">
+                  <span class="px-2.5 py-0.5 rounded-lg text-[11px] font-bold bg-stone-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-stone-200/80 dark:border-slate-700">
+                    📍 ${escapeHtml(spot.districtLabel || spot.area)}
+                  </span>
+                  <span class=" px-2 py-0.5 rounded-lg text-[11px] font-semibold bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200/70 dark:border-emerald-800/60">
+                    🟢 Open Now
+                  </span>
+                </div>
+
+                ${spot.distanceKm !== null ? `
+                  <span class="px-2.5 py-0.5 rounded-lg text-[11px] font-extrabold bg-emerald-600 text-white shadow-sm">
+                    📍 ${spot.distanceKm.toFixed(1)} km away
+                  </span>
+                ` : `
+                  <span class="text-[11px] font-semibold text-slate-400 dark:text-slate-500">
+                    ${isPub ? '🍻 Pub / Bar' : '☕ Study Cafe'}
+                  </span>
+                `}
+              </div>
+
+              <!-- Venue Name, Category Avatar & Street Address -->
+              <div class="flex items-start gap-3 mb-3">
+                <div class="w-10 h-10 rounded-xl ${isPub ? 'bg-amber-100/80 dark:bg-amber-950/60 border-amber-200 dark:border-amber-800/60' : 'bg-stone-100 dark:bg-slate-800 border-stone-200 dark:border-slate-700'} border flex items-center justify-center text-lg shrink-0 select-none">
+                  ${escapeHtml(iconEmoji)}
+                </div>
+                <div class="min-w-0 flex-1">
+                  <h3 class="text-base font-extrabold text-slate-900 dark:text-white leading-snug">
+                    ${escapeHtml(spot.name)}
+                  </h3>
+                  <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    ${escapeHtml(spot.street)}
+                  </p>
+                </div>
+              </div>
+
+              <!-- Highlighted Deal Container (Warm Amber / Emerald Container) -->
+              <div class="mb-2.5 px-3 py-2 rounded-xl border ${dealContainerStyle} flex items-center justify-between gap-2">
+                <span class="text-xs font-bold leading-snug">
+                  ${escapeHtml(spot.dealHeadline)}
+                </span>
+                <span class="shrink-0 px-2 py-0.5 rounded-md bg-white/80 dark:bg-slate-900/80 text-xs font-extrabold text-slate-900 dark:text-white border border-black/5">
+                  $${Number(spot.priceStart).toFixed(2)}
+                </span>
+              </div>
+
+              <!-- Active Promo Tag -->
+              <div class="mb-3 px-3 py-1.5 rounded-xl bg-amber-50/70 dark:bg-slate-800/90 border border-amber-200/70 dark:border-slate-700 text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                <span class="shrink-0">🏷️</span>
+                <span>${escapeHtml(spot.promoTag)}</span>
+              </div>
+
+              <!-- Specs Row (3 Clean Badges: Wi-Fi Speed, Power Outlets, Noise Level) -->
+              <div class="grid grid-cols-3 gap-1.5 mb-3.5">
+                <div class="px-2 py-1.5 rounded-xl bg-stone-100/80 dark:bg-slate-800/80 border border-stone-200/80 dark:border-slate-700/70 text-center">
+                  <span class="block text-[10px] font-semibold uppercase text-slate-400 dark:text-slate-500">Wi-Fi</span>
+                  <span class="text-xs font-bold text-slate-800 dark:text-slate-200">⚡ ${escapeHtml(spot.wifiSpeed)}</span>
+                </div>
+
+                <div class="px-2 py-1.5 rounded-xl border ${outletBadgeStyle} text-center">
+                  <span class="block text-[10px] font-semibold uppercase opacity-75">Outlets</span>
+                  <span class="text-xs font-bold">🔌 ${escapeHtml(spot.outlets)}</span>
+                </div>
+
+                <div class="px-2 py-1.5 rounded-xl bg-stone-100/80 dark:bg-slate-800/80 border border-stone-200/80 dark:border-slate-700/70 text-center">
+                  <span class="block text-[10px] font-semibold uppercase text-slate-400 dark:text-slate-500">Vibe</span>
+                  <span class="text-xs font-bold text-slate-800 dark:text-slate-200">${spot.noiseLevel === 'Quiet Study' ? '🤫 Quiet Study' : '🗣️ Social'}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons Row: Google Maps + Save Bookmark Toggle -->
+            <div class="pt-2.5 border-t border-stone-200/70 dark:border-slate-800 flex items-center justify-between gap-2">
+              <a
+                href="${escapeHtml(mapsUrl)}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="flex-1 py-2 px-3 rounded-xl bg-stone-100 hover:bg-slate-900 dark:bg-slate-800 dark:hover:bg-amber-500 text-slate-800 hover:text-white dark:text-slate-200 dark:hover:text-slate-950 font-bold text-xs text-center transition"
+              >
+                📍 Google Maps
+              </a>
+
+              <button
+                type="button"
+                data-action="save-spot"
+                data-id="${escapeHtml(spot.id)}"
+                aria-label="Save ${escapeHtml(spot.name)}"
+                class="px-3.5 py-2 rounded-xl border ${isSaved ? 'bg-rose-50 dark:bg-rose-950/50 border-rose-300 dark:border-rose-800 text-rose-700 dark:text-rose-300 font-bold' : 'bg-white dark:bg-slate-900 border-stone-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-stone-100 font-semibold'} text-xs transition"
+              >
+                ${isSaved ? '❤️ Saved' : '🤍 Save'}
+              </button>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    // --- 8. EVENT LISTENERS ---
+    // Search Input
+    searchInput.addEventListener('input', (e) => {
+      filterState.search = e.target.value;
+      if (filterState.search.trim().length > 0) {
+        clearSearchBtn.classList.remove('hidden');
+      } else {
+        clearSearchBtn.classList.add('hidden');
+      }
+      renderSpots();
+    });
+
+    clearSearchBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      filterState.search = '';
+      clearSearchBtn.classList.add('hidden');
+      renderSpots();
+    });
+
+    // Category Tabs
+    document.querySelectorAll('.cat-tab-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        filterState.category = btn.getAttribute('data-category');
+        renderSpots();
+      });
+    });
+
+    // Area Filter Pills
+    document.querySelectorAll('.area-pill').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        filterState.area = btn.getAttribute('data-area');
+        renderSpots();
+      });
+    });
+
+    // Quick Deal Filter Pills
+    document.querySelectorAll('.deal-pill').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const key = btn.getAttribute('data-deal');
+        filterState.deals[key] = !filterState.deals[key];
+        renderSpots();
+      });
+    });
+
+    // Live GPS "Near Me" Button with Haversine Calculation
+    nearMeGpsBtn.addEventListener('click', () => {
+      if (filterState.gpsActive) {
+        filterState.gpsActive = false;
+        filterState.userLat = null;
+        filterState.userLng = null;
+        renderSpots();
+        return;
+      }
+
+      nearMeText.textContent = 'Locating...';
+
+      const applyCoordinates = (lat, lng, isFallback) => {
+        filterState.gpsActive = true;
+        filterState.userLat = lat;
+        filterState.userLng = lng;
+        if (isFallback) {
+          gpsStatusMessage.textContent = '📍 Sorted by distance from central Phnom Penh (nearest to farthest)';
+          showToast('📍 Sorted nearest to farthest from Phnom Penh center');
+        } else {
+          gpsStatusMessage.textContent = '📍 Live GPS active — sorted from nearest to farthest in km';
+          showToast('📍 Live GPS active! Showing spots nearest to you');
+        }
+        renderSpots();
+      };
+
+      if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            applyCoordinates(pos.coords.latitude, pos.coords.longitude, false);
+          },
+          () => {
+            // Fallback to central Phnom Penh (Independence Monument / BKK1-Daun Penh hub) if blocked by iframe
+            applyCoordinates(11.5564, 104.9282, true);
+          },
+          { enableHighAccuracy: true, timeout: 5000, maximumAge: 60000 }
+        );
+      } else {
+        applyCoordinates(11.5564, 104.9282, true);
+      }
+    });
+
+    clearGpsBtn.addEventListener('click', () => {
+      filterState.gpsActive = false;
+      filterState.userLat = null;
+      filterState.userLng = null;
+      renderSpots();
+    });
+
+    // Saved Bookmarks Filter
+    savedFilterBtn.addEventListener('click', () => {
+      filterState.savedOnly = !filterState.savedOnly;
+      renderSpots();
+    });
+
+    // Reset All Filters
+    function resetFilters() {
+      filterState.search = '';
+      filterState.category = 'all';
+      filterState.area = 'All Areas';
+      filterState.savedOnly = false;
+      filterState.gpsActive = false;
+      filterState.userLat = null;
+      filterState.userLng = null;
+      Object.keys(filterState.deals).forEach((k) => {
+        filterState.deals[k] = false;
+      });
+      searchInput.value = '';
+      clearSearchBtn.classList.add('hidden');
+      renderSpots();
+    }
+
+    resetAllFiltersBtn.addEventListener('click', resetFilters);
+    emptyResetFiltersBtn.addEventListener('click', resetFilters);
+
+    // Delegated Card Bookmark Click
+    spotsGridContainer.addEventListener('click', (e) => {
+      const saveBtn = e.target.closest('button[data-action="save-spot"]');
+      if (!saveBtn) return;
+
+      const id = saveBtn.getAttribute('data-id');
+      if (savedSpotIds.has(id)) {
+        savedSpotIds.delete(id);
+        showToast('Removed from saved spots');
+      } else {
+        savedSpotIds.add(id);
+        showToast('❤️ Saved to your Phnom Penh list');
+      }
+      try {
+        localStorage.setItem('overtime_pp_v3_saved_ids', JSON.stringify([...savedSpotIds]));
+      } catch (err) {}
+      renderSpots();
+    });
+
+    // Theme Toggle (Warm Paper Light Default vs Clean Dark Slate)
+    themeToggleBtn.addEventListener('click', () => {
+      const isDark = document.documentElement.classList.toggle('dark');
+      themeIcon.textContent = isDark ? '☀️' : '🌙';
+    });
+
+    // Footer H3 Link smooth scroll to top
+    document.getElementById('footerBrandLink').addEventListener('click', (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // --- 9. USER SUBMISSION MODAL LOGIC ---
+    function openSubmitModal() {
+      modalErrorBox.classList.add('hidden');
+      submitModalBackdrop.classList.remove('hidden');
+      document.getElementById('spotNameInput').focus();
+    }
+
+    function closeSubmitModal() {
+      submitModalBackdrop.classList.add('hidden');
+    }
+
+    fabSubmitSpotBtn.addEventListener('click', openSubmitModal);
+    emptyOpenModalBtn.addEventListener('click', openSubmitModal);
+    closeModalBtn.addEventListener('click', closeSubmitModal);
+    cancelModalBtn.addEventListener('click', closeSubmitModal);
+
+    submitModalBackdrop.addEventListener('click', (e) => {
+      if (e.target === submitModalBackdrop) {
+        closeSubmitModal();
+      }
+    });
+
+    submitSpotForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('spotNameInput').value.trim();
+      const area = document.getElementById('spotAreaInput').value;
+      const priceVal = parseFloat(document.getElementById('spotPriceInput').value);
+      const streetVal = document.getElementById('spotStreetInput').value.trim() || `${area}, Phnom Penh`;
+      const promoVal = document.getElementById('spotPromoInput').value.trim();
+      const catRadio = submitSpotForm.querySelector('input[name="spotCategoryInput"]:checked');
+      const category = catRadio ? catRadio.value : 'cafe';
+
+      const happyHour = document.getElementById('chkHappyHour').checked;
+      const studentDiscount = document.getElementById('chkStudentDiscount').checked;
+      const plentifulOutlets = document.getElementById('chkPlentifulOutlets').checked;
+      const quietFocus = document.getElementById('chkQuietFocus').checked;
+
+      if (!name || isNaN(priceVal) || priceVal <= 0 || !promoVal) {
+        modalErrorBox.classList.remove('hidden');
+        return;
+      }
+
+      modalErrorBox.classList.add('hidden');
+
+      const coords = AREA_COORDS[area] || { lat: 11.5564, lng: 104.9282 };
+      const isPub = category === 'pub';
+
+      const newSpot = {
+        id: `custom-${Date.now()}`,
+        name,
+        category,
+        avatar: isPub ? '🍻' : '☕',
+        area,
+        districtLabel: area,
+        street: streetVal,
+        lat: coords.lat,
+        lng: coords.lng,
+        priceStart: priceVal,
+        dealHeadline: isPub
+          ? `🍻 Drinks start from $${priceVal.toFixed(2)} — Community verified`
+          : `☕ Drinks start from $${priceVal.toFixed(2)} — Community verified`,
+        promoTag: promoVal,
+        wifiSpeed: isPub ? '35 Mbps' : '50 Mbps',
+        outlets: plentifulOutlets ? 'Plentiful' : 'Limited',
+        noiseLevel: quietFocus ? 'Quiet Study' : 'Social Hangout',
+        happyHour: happyHour || isPub,
+        studentDiscount,
+        quietFocus,
+        isCustom: true
+      };
+
+      spots.unshift(newSpot);
+
+      try {
+        const customSpots = spots.filter((s) => s.isCustom);
+        localStorage.setItem('overtime_pp_v3_custom_spots', JSON.stringify(customSpots));
+      } catch (err) {}
+
+      resetFilters();
+      submitSpotForm.reset();
+      closeSubmitModal();
+      showToast('Thank you! Spot added to Overtime PP 🎉');
+    });
+
+    // Initial render
+    renderSpots();
+  </script>
+</body>
+</html>

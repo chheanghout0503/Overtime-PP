@@ -1608,38 +1608,55 @@
     displayResultsInMiniApp(matchedVenues);
   }
 
-  // 6. RENDER CARDS TO YOUR SCREEN
+   // 6. RENDER CARDS TO YOUR REAL APP CONTAINER
   function displayResultsInMiniApp(resultsArray) {
-    // If you have a specific div id to put your search results, replace 'results-container' with it
-    const container = document.getElementById("results-container");
+    // Connect directly to your app's real container elements from line 973
+    const container = document.getElementById("spotsGridContainer");
+    const emptyState = document.getElementById("emptyStateCard");
+    const counterText = document.getElementById("resultCounterText");
     
     if (!container) {
-      console.warn("Could not find a container layout element with ID 'results-container' to print items into.");
+      console.warn("Could not find spotsGridContainer layout element on screen.");
       return;
     }
 
-    // Reset container contents
+    // Update the counter text banner
+    if (counterText) {
+      counterText.textContent = `Showing ${resultsArray.length} spots`;
+    }
+
+    // Clear previous items
     container.innerHTML = "";
 
+    // If no matches, show your native empty state panel
     if (resultsArray.length === 0) {
-      container.innerHTML = "<p style='color: gray; text-align: center;'>No matching spots found. Try a different request!</p>";
+      if (emptyState) emptyState.classList.remove("hidden");
       return;
     }
 
-    // Build the visual layout loop
+    // Hide your empty state layout if results exist
+    if (emptyState) emptyState.classList.add("hidden");
+
+    // Loop through and render your cards using your app's visual style layout
     resultsArray.forEach(place => {
       const card = document.createElement("div");
-      card.style.border = "1px solid #ccc";
-      card.style.borderRadius = "8px";
-      card.style.padding = "12px";
-      card.style.marginBottom = "10px";
-      card.style.backgroundColor = place.type === "cafe" ? "#fdfbf7" : "#f3f4f6";
+      // Applying standard cards design classes
+      card.className = "p-4 border border-slate-200 dark:border-slate-800 rounded-2xl bg-white dark:bg-slate-900 shadow-sm transition-all duration-200";
 
       card.innerHTML = `
-        <h4 style="margin: 0 0 5px 0;">${place.name} <span style="font-size:12px; color: gray;">(${place.type.toUpperCase()})</span></h4>
-        <p style="margin: 0 0 5px 0; font-size: 14px;"><strong>🔌 Outlets:</strong> ${place.has_plugs ? "Available ✅" : "None ❌"}</p>
-        <p style="margin: 0 0 5px 0; font-size: 14px;"><strong>🎯 Vibe:</strong> ${place.atmosphere.replace("_", " ")}</p>
-        <p style="margin: 0; font-size: 14px; color: #d97706;"><strong>🎁 Offer:</strong> ${place.promotion}</p>
+        <div class="flex justify-between items-start mb-2">
+          <h4 class="font-bold text-slate-900 dark:text-white text-base">${place.name}</h4>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider ${place.type === 'cafe' ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400' : 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400'}">
+            ${place.type}
+          </span>
+        </div>
+        <div class="space-y-1.5 text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+          <p class="flex items-center gap-2"><span>🔌</span> <strong>Outlets:</strong> ${place.has_plugs ? "Available ✅" : "None ❌"}</p>
+          <p class="flex items-center gap-2"><span>🎯</span> <strong>Vibe:</strong> ${place.atmosphere.replace("_", " ")}</p>
+          <p class="mt-2 text-xs font-medium text-amber-600 dark:text-amber-400 flex items-center gap-1.5 bg-amber-50 dark:bg-amber-950/20 p-2 rounded-xl">
+            <span>🎁</span> <strong>Offer:</strong> ${place.promotion}
+          </p>
+        </div>
       `;
       container.appendChild(card);
     });

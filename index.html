@@ -1501,3 +1501,156 @@
   </script>
 </body>
 </html>
+<!-- ========================================== -->
+<!-- OVERTIMEPP GEMINI AI ENGINE START HERE -->
+<!-- ========================================== -->
+
+<!-- 1. Load the official Google GenAI library directly into your web browser -->
+<script type="importmap">
+  {
+    "imports": {
+      "@google/genai": "https://esm.run"
+    }
+  }
+</script>
+
+<script type="module">
+  import { GoogleGenAI } from '@google/genai';
+
+  // 2. PASTE YOUR ACTUAL GEMINI KEY INSIDE THE QUOTES BELOW:
+  const GEMINI_API_KEY = "YOUR_PASTED_KEY_FROM_STEP_1";
+  
+  const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+
+  // 3. YOUR OVERTIMEPP LOCAL DATABASE OF CAFES AND PUBS
+  // You can easily add, change, or remove venues inside this array list!
+  const overtimeVenuesList = [
+    {
+      name: "Brown Coffee Roasters (Phnom Penh)",
+      type: "cafe",
+      has_plugs: true,
+      atmosphere: "quiet_study",
+      promotion: "10% Student Discount on morning brews"
+    },
+    {
+      name: "Tube Coffee",
+      type: "cafe",
+      has_plugs: true,
+      atmosphere: "busy_work",
+      promotion: "Buy 1 Get 1 Free on special items"
+    },
+    {
+      name: "Bassac Lane Chill Bar",
+      type: "pub",
+      has_plugs: false,
+      atmosphere: "lively_social",
+      promotion: "Happy Hour: 50% off craft beers (5:00 PM - 7:30 PM)"
+    },
+    {
+      name: "The Factory Phnom Penh (Workspace)",
+      type: "cafe",
+      has_plugs: true,
+      atmosphere: "quiet_study",
+      promotion: "Free high-speed WiFi token with any drink purchase"
+    }
+  ];
+
+  // 4. THE AI CONVERSION BRAIN
+  async function askOvertimeAI(userTextQuery) {
+    console.log("User typed:", userTextQuery);
+    
+    try {
+      const systemPrompt = `
+        The user wants a place to study or drink matching: "${userTextQuery}".
+        Convert this request into a strict JSON format with these exact keys:
+        {
+          "type": "cafe" or "pub" or "any",
+          "needs_plugs": true or false,
+          "needs_happy_hour": true or false
+        }
+      `;
+
+      // Use the ultra-fast, free gemini-2.5-flash model
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: systemPrompt,
+        config: { responseMimeType: "application/json" }
+      });
+
+      // Parse the AI output into filters
+      const parsedFilters = JSON.parse(response.text);
+      console.log("AI interpreted the intent as:", parsedFilters);
+      
+      // Execute the matching logic
+      runVenueFiltering(parsedFilters);
+
+    } catch (err) {
+      console.error("AI Configuration or Connection Error:", err);
+      alert("AI Search encountered an issue. Check your API key or console logs!");
+    }
+  }
+
+  // 5. THE DATABASE FILTER ENGINE
+  function runVenueFiltering(filters) {
+    const matchedVenues = overtimeVenuesList.filter(place => {
+      // Filter by Cafe vs Pub
+      if (filters.type !== 'any' && place.type !== filters.type) return false;
+      // Filter by Power Plug requirement
+      if (filters.needs_plugs && !place.has_plugs) return false;
+      // Filter by Happy Hour / Promotion need
+      if (filters.needs_happy_hour && !place.promotion.toLowerCase().includes("happy hour")) return false;
+      
+      return true;
+    });
+
+    console.log("Successfully found matches:", matchedVenues);
+    displayResultsInMiniApp(matchedVenues);
+  }
+
+  // 6. RENDER CARDS TO YOUR SCREEN
+  function displayResultsInMiniApp(resultsArray) {
+    // If you have a specific div id to put your search results, replace 'results-container' with it
+    const container = document.getElementById("results-container");
+    
+    if (!container) {
+      console.warn("Could not find a container layout element with ID 'results-container' to print items into.");
+      return;
+    }
+
+    // Reset container contents
+    container.innerHTML = "";
+
+    if (resultsArray.length === 0) {
+      container.innerHTML = "<p style='color: gray; text-align: center;'>No matching spots found. Try a different request!</p>";
+      return;
+    }
+
+    // Build the visual layout loop
+    resultsArray.forEach(place => {
+      const card = document.createElement("div");
+      card.style.border = "1px solid #ccc";
+      card.style.borderRadius = "8px";
+      card.style.padding = "12px";
+      card.style.marginBottom = "10px";
+      card.style.backgroundColor = place.type === "cafe" ? "#fdfbf7" : "#f3f4f6";
+
+      card.innerHTML = `
+        <h4 style="margin: 0 0 5px 0;">${place.name} <span style="font-size:12px; color: gray;">(${place.type.toUpperCase()})</span></h4>
+        <p style="margin: 0 0 5px 0; font-size: 14px;"><strong>🔌 Outlets:</strong> ${place.has_plugs ? "Available ✅" : "None ❌"}</p>
+        <p style="margin: 0 0 5px 0; font-size: 14px;"><strong>🎯 Vibe:</strong> ${place.atmosphere.replace("_", " ")}</p>
+        <p style="margin: 0; font-size: 14px; color: #d97706;"><strong>🎁 Offer:</strong> ${place.promotion}</p>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  // Make the search trigger accessible globally by your search buttons
+  window.triggerOvertimeAISearch = function(textInput) {
+    if(!textInput.trim()) return;
+    askOvertimeAI(textInput);
+  };
+</script>
+
+<!-- ========================================== -->
+<!-- OVERTIMEPP GEMINI AI ENGINE END HERE -->
+<!-- ========================================== -->

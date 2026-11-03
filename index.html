@@ -123,11 +123,12 @@
               <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z" />
             </svg>
             <input
-              id="searchInput"
-              type="text"
-              placeholder="Search cafe, pub, street, or area (e.g. Toul Kork, BKK1, Sen Sok)..."
-              class="w-full pl-10 pr-9 py-2.5 text-xs sm:text-sm rounded-xl bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 border border-stone-300/90 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-600 dark:focus:ring-amber-500 focus:border-transparent shadow-sm transition"
-            />
+  id="searchInput"
+  type="text"
+  placeholder="Search cafe, pub, street, or area (e.g. Toul Kork, BKK1, Sen Sok)..."
+  class="w-full pl-10 pr-9 py-2.5 text-xs sm:text-sm rounded-xl bg-white dark:bg-slate-900 text-slate-900 dark:t"
+  onkeyup="if(event.key === 'Enter') window.triggerOvertimeAISearch(this.value)"
+/>
             <button
               id="clearSearchBtn"
               type="button"
